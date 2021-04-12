@@ -21,7 +21,7 @@ EOF
 # make project file
 touch $project_name.yml
 cat << EOF > $project_name.yml
-- host: <<host_name>>
+- hosts: <<host_name>>
   roles:
     - $project_name
 EOF
