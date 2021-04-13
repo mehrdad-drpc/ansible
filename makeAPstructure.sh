@@ -21,9 +21,14 @@ EOF
 # make project file
 touch $project_name.yml
 cat << EOF > $project_name.yml
-- hosts: <<host_name>>
+- name: something about your playbook
+  hosts: <<host_name>>
   roles:
     - $project_name
+  vars:
+    key1: val1
+    key2: val2
+  become: true/false
 EOF
 
 # make roles direcory with all subdirectories
