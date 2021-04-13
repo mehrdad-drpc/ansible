@@ -1,0 +1,177 @@
+- name: --- create directory on /home ----
+  file:
+    path: /home/dir1
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  tags: [create_dir]
+    
+- name: --- create another directory ---
+  file: path=/home/dir2 state=directory owner=root group=root mode=0755
+  tags: [create_dir]
+
+- name: --- new file 3 ---
+  file:
+    path: /home/file1
+    state: touch
+    owner: root
+    group: root
+    mode: 0744
+  tags: [create_file]
+
+- name: --- show group variable ---
+  debug:
+    msg: "{{http_port}}"
+  tags: [show_http_port]
+
+- name: --- show production and stage variable value ---
+  debug:
+    msg: "{{myvar}}"
+  tags: [show_myvar]
+
+- name: --- command module ---
+  command: ps aux 
+  args:
+    chdir: /home
+    creates: /home/dir3
+    removes: /home/dir1
+  register: command_out
+  tags: cmd_mod
+
+- name: --- print command_out ---
+  debug:
+    msg: "{{command_out}}"
+  tags: cmd_mod
+
+- name: --- install pexpect via command playbook ---
+  command: yum install -y python3-pip
+  tags: [install_pexpect]
+
+- name: --- install pexpect via pip ---
+  command: pip3 install pexpect
+  tags: [install_pexpect]
+
+- name: --- expect module ---
+  expect:
+    command: passwd mehrdadq
+    responses: 
+      password: "qwe"
+    # nolog: true
+  tags: [expect_mod]
+
+- name: --- script module ---
+  script: script.sh
+  tags: [script_mod]
+
+- name: --- shell module ---
+  shell: ps aux | grep -i ansible
+  args:
+    creates: /home/dir3
+    removes: /home/dir1
+  register: shell_var
+  tags: [shell_mod] 
+
+- name: --- print - shell_var ---
+  debug:
+    msg: "{{shell_var}}"
+  tags: [shell_mod]
+
+- name: --- raw module ---
+  raw: echo "ansible RAW module" > /home/raw_out
+  tags: [raw_mod]
+
+- name: --- copy module ---
+  copy:
+    src: /home/dir1/myfile
+    dest: /home/dir2
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0644
+    force: yes
+    backup: yes
+  tags: [copy_mod]
+
+- name: --- fetch module ---
+  fetch: 
+    src: /home/dir1/myfile
+    dest: /tmp/ansible/
+    flat: yes
+    validate_checksum: yes
+  tags: [fetch_mod]
+
+- name: --- group module ---
+  group:
+    name: ansible
+    state: present
+  tags: [group_mod]
+
+- name: --- user module ---
+  user:
+    name: mehrdadq
+    group: ansible
+    state: present
+    shell: /bin/bash
+    password: 123
+  tags: [user_mod]
+
+- name: --- yum-repo module ---
+  yum_repository:
+    name: mehrdad
+    description: extra repor for RHEL
+    baseurl: https://mehrdad_repo_link.com
+    gpgcheck: no
+    enabled: yes
+    state: absent
+  tags: [yum_repo_mod]
+
+- name: --- install package via yum ---
+  yum:
+    name: nginx
+    state: present
+  tags: [yum_mod_install]
+
+- name: --- update a package via yum ---
+  yum:
+    name: nginx
+    state: latest
+    update_only: yes
+    security: yes
+  tags: [yum_mod_update]
+
+- name: --- update yum package exclude one ---
+  yum:
+    name: '*'
+    state: latest
+    exclude: kernel*
+  tags: [yum_mod_update]
+
+- name: --- get yum list ---
+  yum:
+    list: httpd
+  register: yum_mod_out
+  tags: [yum_list]
+
+- name: --- print yum list output ---
+  debug:
+    msg: "{{ yum_mod_out }}"
+  tags: [yum_list]
+
+- name: --- install package via apt ---
+  apt:
+    name: nginx
+    state: present
+  tags: [apt_mod_install]
+
+- name: --- remove package via apt ---
+  apt:
+    name: [nginx,nginx-common]
+    state: absent
+    purge: yes
+  tags: [apt_mod_remove]
+
+- name: --- use autoremove in debian ---
+  apt:
+    autoremove: yes
+  tags: [apt_mod_remove]

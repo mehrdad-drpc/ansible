@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf provision
+#rm -rf provision
 
 # get project name
 echo "Enter your project name:"  
