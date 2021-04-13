@@ -96,7 +96,7 @@
 - name: --- fetch module ---
   fetch: 
     src: /etc/nginx/nginx.conf
-    dest: /tmp/ansible/1
+    dest: /tmp/ansible/
     flat: yes
     validate_checksum: yes
   tags: [fetch_mod]
@@ -185,3 +185,10 @@
     backup: yes
     # forece: yes
   tags: [tmp_mod]
+
+- name: --- lineinfile module ---
+  lineinfile: 
+    path: /etc/nginx/nginx.conf
+    insertafter: ' listen       80 default_server;'
+    line: '        listen       8090 default_server;'
+  tags: [lineinfile_mod]
