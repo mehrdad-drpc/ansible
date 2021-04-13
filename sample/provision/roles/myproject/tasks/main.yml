@@ -189,6 +189,20 @@
 - name: --- lineinfile module ---
   lineinfile: 
     path: /etc/nginx/nginx.conf
-    insertafter: ' listen       80 default_server;'
-    line: '        listen       8090 default_server;'
+    # insertafter: ' listen       80 default_server;'
+    # line: '        listen       8090 default_server;'
+    insertafter: '^#listen'
+    line: 'listen 8080'
+    # state: absent
+    backup: yes
   tags: [lineinfile_mod]
+
+- name: --- replace module ---
+  replace:
+    path: /etc/nginx/nginx.conf
+    regexp: 'listen       80 default_server;'
+    replace: 'listen       8088 default_server;'
+    # after: from line number
+    # before: to line number
+    backup: yes
+  tags: [rep_mod]
