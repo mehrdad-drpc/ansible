@@ -95,8 +95,8 @@
 
 - name: --- fetch module ---
   fetch: 
-    src: /home/dir1/myfile
-    dest: /tmp/ansible/
+    src: /etc/nginx/nginx.conf
+    dest: /tmp/ansible/1
     flat: yes
     validate_checksum: yes
   tags: [fetch_mod]
@@ -175,3 +175,13 @@
   apt:
     autoremove: yes
   tags: [apt_mod_remove]
+
+- name: --- template module ---
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    # owner: root
+    # group: root
+    backup: yes
+    # forece: yes
+  tags: [tmp_mod]
