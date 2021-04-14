@@ -206,3 +206,16 @@
     # before: to line number
     backup: yes
   tags: [rep_mod]
+
+- name: --- enable/disable systemctl service ---
+  service:
+    name: nginx
+    enabled: yes
+  tags: [srv_mod_ed]
+
+- name: --- start/stop systemctl service ---
+  service:
+    name: nginx
+    state: restarted
+  register: sysout
+  tags: [srv_mod_ss]
