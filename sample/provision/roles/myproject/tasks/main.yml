@@ -201,7 +201,7 @@
   replace:
     path: /etc/nginx/nginx.conf
     regexp: 'listen       80 default_server;'
-    replace: 'listen       8088 default_server;'
+    replace: 'listen       8080 default_server;'
     # after: from line number
     # before: to line number
     backup: yes
@@ -243,19 +243,27 @@
   delegate_to: localhost
   tags: [wait_for_mod]
 
-- name: --- after wait for finished ---
+- name: --- after wait for fiished ---
   debug: 
     msg: "wait for was finished"
   tags: [wait_for_mod]
 
-- name: --- wait till the string 'AppleWebKit' appread in access.log file ---
+- name: --- wait till the string '192.168.0.127' appread in access.log file ---
   wait_for: 
   # follow this path till the search_regex appears
     path: /var/log/nginx/access.log 
-    search_regex: 'AppleWebKit'
+    search_regex: '192.168.0.127'
   tags: [wait_till_for_mod]
 
 - name: --- after wait_for execution ---
   debug:
     msg: Nginx is running
   tags: [wait_till_for_mod]
+
+- name: --- wait for till port is up or down ---
+  wait_for:
+    host: 192.168.0.159
+    port: 8080
+    delay: 5
+    state: stopped
+  tags: [wait_for_port_mod]
