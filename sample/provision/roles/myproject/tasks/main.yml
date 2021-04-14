@@ -237,8 +237,25 @@
     # keepnewer: no
   tags: [unarc_mod]
 
-- name: --- wait in second with wate_for module --- 
-  wate_for: 
-    timeout: 300 #second
+- name: --- wate_for module --- 
+  wait_for: 
+    timeout: 10 #second, default value is 300
   delegate_to: localhost
-  tags: [wait_mod]
+  tags: [wait_for_mod]
+
+- name: --- after wait for finished ---
+  debug: 
+    msg: "wait for was finished"
+  tags: [wait_for_mod]
+
+- name: --- wait till the string 'AppleWebKit' appread in access.log file ---
+  wait_for: 
+  # follow this path till the search_regex appears
+    path: /var/log/nginx/access.log 
+    search_regex: 'AppleWebKit'
+  tags: [wait_till_for_mod]
+
+- name: --- after wait_for execution ---
+  debug:
+    msg: Nginx is running
+  tags: [wait_till_for_mod]
