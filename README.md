@@ -1,2 +1,3 @@
 # ansible
+A simple and sample ansible playbook
 my ansible config, playbook, adhoc, and the other things...
