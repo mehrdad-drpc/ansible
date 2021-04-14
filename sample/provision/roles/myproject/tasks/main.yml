@@ -219,3 +219,20 @@
     state: restarted
   register: sysout
   tags: [srv_mod_ss]
+
+- name: --- archive module ---
+  archive:
+    path: /home/dir1/*
+    dest: /tmp/test.tar.gz
+    exclude_path: 
+      - file1
+  tags: [archive_mod]
+
+- name: --- unarchive module ---
+  unarchive:
+    src: files.tar.gz
+    dest: /home/test2/
+    exclude:
+      - f2
+    # keepnewer: no
+  tags: [unarc_mod]
