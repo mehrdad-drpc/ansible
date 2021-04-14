@@ -61,7 +61,7 @@
   tags: [expect_mod]
 
 - name: --- script module ---
-  script: script.sh
+  script: script.sh   # read script from files directory
   tags: [script_mod]
 
 - name: --- shell module ---
@@ -236,3 +236,9 @@
       - f2
     # keepnewer: no
   tags: [unarc_mod]
+
+- name: --- wait in second with wate_for module --- 
+  wate_for: 
+    timeout: 300 #second
+  delegate_to: localhost
+  tags: [wait_mod]
