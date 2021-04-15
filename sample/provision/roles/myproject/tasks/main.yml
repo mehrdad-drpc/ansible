@@ -267,3 +267,29 @@
     delay: 5
     state: stopped
   tags: [wait_for_port_mod]
+
+- name: --- ignore erroe ---
+  command: /bin/false 
+  ignore_error: yes
+
+- name: --- Async yum sample ---
+  yum:
+    name: *
+    state: latest
+  async: 7200
+  poll: 30
+
+- name: --- Fire and Forget --- # run parallel tasks
+  yum: 
+    name: *
+    state: latest
+  async: 7200
+  poll: 0 # with poll=0 ansible just triger task and does not check it again
+  tags: [fireandforget]
+
+- name: --- next task is running ---
+  debug: 
+    msg: "Next Task is Running"
+  tags: [fireandforget]
+
+
