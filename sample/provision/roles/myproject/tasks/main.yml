@@ -292,4 +292,11 @@
     msg: "Next Task is Running"
   tags: [fireandforget]
 
+- name: --- wait for connection module ---
+  wait_for_connection: 
+    timeout: 300 # waiting time for, in second for specific task
+    delay: 10 # second
+    sleep: 5 # second
+  tags: [wait_for_connection_mod]
 
+- name: --- reboot connection ---
