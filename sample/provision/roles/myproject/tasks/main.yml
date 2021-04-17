@@ -330,3 +330,13 @@
     msg: "Hosts have been rebooted"
   tags: [reboot_hosts]
 
+- name: --- reboot module ---
+  reboot:
+    reboot_timeout: 30
+    msg: "The system is going to reboot immediately"
+  tags: [reboot_mod]
+
+- name: --- after reboot with reboot mod ---
+  debug:
+    msg: "reboot mod was working gooood"
+  tags: [reboot_mod]
