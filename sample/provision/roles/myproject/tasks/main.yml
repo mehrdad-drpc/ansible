@@ -270,21 +270,23 @@
 
 - name: --- ignore erroe ---
   command: /bin/false 
-  ignore_error: yes
+  ignore_errors: yes
+  tags: [ignore_err]
 
-- name: --- Async yum sample ---
+- name: --- Update all packages in sync mode ---
   yum:
-    name: *
+    name: "*"
     state: latest
   async: 7200
   poll: 30
+  tags: [yum_async_update]
 
 - name: --- Fire and Forget --- # run parallel tasks
   yum: 
-    name: *
+    name: "*"
     state: latest
   async: 7200
-  poll: 0 # with poll=0 ansible just triger task and does not check it again
+  poll: 0 # with poll=0 ansible just triger task and does not wait for and check it again
   tags: [fireandforget]
 
 - name: --- next task is running ---
@@ -294,9 +296,37 @@
 
 - name: --- wait for connection module ---
   wait_for_connection: 
-    timeout: 300 # waiting time for, in second for specific task
-    delay: 10 # second
-    sleep: 5 # second
+    timeout: 300 # maximum wait time for, in second for specific task
+    delay: 10 # first delay in second
+    sleep: 5 # each interval to check task in second
   tags: [wait_for_connection_mod]
 
-- name: --- reboot connection ---
+- name: --- check waiting connection module ---
+  debug: 
+    msg: "wait for connection has been passed"
+  tags: [wait_for_connection_mod]
+
+- name: --- reboot active connection ---
+  shell: "sleep 1 && reboot"
+  async: 30
+  poll: 0
+  ignore_errors: yes
+  tags: [reboot_hosts]
+
+- name: --- after reboot 1 ---
+  debug:
+    msg: "Hosts have been rebooted"
+  tags: [reboot_hosts]
+
+- name: --- wait for connection module ---
+  wait_for_connection: 
+    timeout: 300 # maximum wait time for, in second for specific task
+    delay: 10 # first delay in second
+    sleep: 5 # each interval to check task in second
+  tags: [reboot_hosts]
+
+- name: --- after reboot 2 ---
+  debug:
+    msg: "Hosts have been rebooted"
+  tags: [reboot_hosts]
+
