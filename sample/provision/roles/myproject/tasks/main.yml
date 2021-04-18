@@ -375,10 +375,10 @@
 
 - name: --- Send notification message via Mattermost all options ---
   community.general.mattermost:
-    url: http://mattermost.example.com
+    url: https://mycompany.ir
     api_key: my_api_key
     text: '{{ inventory_hostname }} completed'
     channel: notifications
     username: 'Ansible on {{ inventory_hostname }}'
-    icon_url: http://www.example.com/some-image-file.png
+    icon_url: https://mycompany.ir/image-file.png
 
