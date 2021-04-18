@@ -341,56 +341,80 @@
     msg: "reboot mod was working gooood"
   tags: [reboot_mod]
 
-- name: --- Mail module sample ---
-  mail:
-    host: 192.168.0.127
-    port: 25 # SMTP defaul port
-    subject: Ansible-Mail-Module # this field is required
-    body: System {{ ansible_hostname }} has been successfully provisioned.
-    from: mehrdad.drpc@gmail.com (Mehrdad Qasemkhani)
-    to: 
-      - mehrdad.drpc@yahoo.com
-      - mehrdad.pc@gmail.com
-    attach:
-    - /etc/group
-    - /tmp/avatar2.png
-    headers:
-      - Reply-To=mehrdad.drpc@yahoo.com
-      - X-Special="Something or other"  
-    charset: utf-8
-  tags: [mail_mod, notif]
+# - name: --- Mail module sample ---
+#   mail:
+#     host: 192.168.0.127
+#     port: 25 # SMTP defaul port
+#     subject: Ansible-Mail-Module # this field is required
+#     body: System {{ ansible_hostname }} has been successfully provisioned.
+#     from: mehrdad.drpc@gmail.com (Mehrdad Qasemkhani)
+#     to: 
+#       - mehrdad.drpc@yahoo.com
+#       - mehrdad.pc@gmail.com
+#     attach:
+#     - /etc/group
+#     - /tmp/avatar2.png
+#     headers:
+#       - Reply-To=mehrdad.drpc@yahoo.com
+#       - X-Special="Something or other"  
+#     charset: utf-8
+#   tags: [mail_mod, notif]
 
-- name: --- Send notification message via Slack all options ---
-  community.general.slack:
-    token: thetoken/generatedby/slack
-    msg: '{{ inventory_hostname }} completed'
-    channel: '#ansible'
-    thread_id: '1539917263.000100'
-    username: 'Ansible on {{ inventory_hostname }}'
-    icon_url: http://www.example.com/some-image-file.png
-    link_names: 0
-    parse: 'none'
-  delegate_to: localhost
-  tags: [slack_mod, notif]
+# - name: --- Send notification message via Slack all options ---
+#   community.general.slack:
+#     token: thetoken/generatedby/slack
+#     msg: '{{ inventory_hostname }} completed'
+#     channel: '#ansible'
+#     thread_id: '1539917263.000100'
+#     username: 'Ansible on {{ inventory_hostname }}'
+#     icon_url: http://www.example.com/some-image-file.png
+#     link_names: 0
+#     parse: 'none'
+#   delegate_to: localhost
+#   tags: [slack_mod, notif]
 
-- name: --- Send notification message via Mattermost all options ---
-  community.general.mattermost:
-    url: https://mycompany.ir
-    api_key: my_api_key
-    text: '{{ inventory_hostname }} completed'
-    channel: notifications
-    username: 'Ansible on {{ inventory_hostname }}'
-    icon_url: https://mycompany.ir/image-file.png
-  tags: [mattermost_mod, notif]
+# - name: --- Send notification message via Mattermost all options ---
+#   community.general.mattermost:
+#     url: https://mycompany.ir
+#     api_key: my_api_key
+#     text: '{{ inventory_hostname }} completed'
+#     channel: notifications
+#     username: 'Ansible on {{ inventory_hostname }}'
+#     icon_url: https://mycompany.ir/image-file.png
+#   tags: [mattermost_mod, notif]
   
-- name: --- Send notify to Telegram ---
-  community.general.telegram:
-    token: '9999999:XXXXXXXXXXXXXXXXXXXXXXX'
-    api_args:
-      chat_id: 000000
-      parse_mode: "markdown"
-      text: "Your precious application has been deployed: https://example.com"
-      disable_web_page_preview: True
-      disable_notification: True
-  tags: [telegram_mod, notif]
+# - name: --- Send notify to Telegram ---
+#   community.general.telegram:
+#     token: '9999999:XXXXXXXXXXXXXXXXXXXXXXX'
+#     api_args:
+#       chat_id: 000000
+#       parse_mode: "markdown"
+#       text: "Your precious application has been deployed: https://example.com"
+#       disable_web_page_preview: True
+#       disable_notification: True
+#   tags: [telegram_mod, notif]
 
+- name: --- Checkout subversion repository to specified folder ---
+  subversion:
+    repo: svn+ssh://svnHub.com/mehrdad-drpc/ansible/
+    dest: /src/checkout
+    username: mehrdad.drpc@gmail.com
+    passwod: 1234
+    revision: "5"
+  tags: [svn_mod]
+
+- name: --- install git over CentOS machine --- 
+  yum: 
+    name: git
+    state: present
+  tags: [install_git]
+
+- name: --- Git module ---
+  git:
+    repo: https://username:password@github.com/mehrdad-drpc/ansible.git
+    # repo: git@github.com:mehrdad-drpc/ansible.git
+    dest: /opt/ansibleapp
+    # key_file: /home/mehrdad/.ssh/mehrdadkey
+    # accept_hostkey: yes
+    # revision: v1.0
+  tags: [git_mod]
