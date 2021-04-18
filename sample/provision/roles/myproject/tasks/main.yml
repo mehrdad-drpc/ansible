@@ -418,3 +418,11 @@
     # accept_hostkey: yes
     # revision: v1.0
   tags: [git_mod]
+
+- name: --- get url module ---
+  get_url:
+    url: https://ninerabbit.ir/wp-content/uploads/2020/07/Ansible_logo.svg.png
+    dest: /tmp
+    mode: 777
+    timeout: 300
+  tags: [geturl_mod]
