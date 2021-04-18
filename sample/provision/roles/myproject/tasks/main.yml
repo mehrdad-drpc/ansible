@@ -358,6 +358,7 @@
       - Reply-To=mehrdad.drpc@yahoo.com
       - X-Special="Something or other"  
     charset: utf-8
+  tags: [mail_mod, notif]
 
 - name: --- Send notification message via Slack all options ---
   community.general.slack:
@@ -370,3 +371,4 @@
     link_names: 0
     parse: 'none'
   delegate_to: localhost
+  tags: [slack_mod, notif]
