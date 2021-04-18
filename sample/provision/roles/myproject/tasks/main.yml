@@ -340,3 +340,21 @@
   debug:
     msg: "reboot mod was working gooood"
   tags: [reboot_mod]
+
+- name: --- Mail module sample ---
+  mail:
+    host: 192.168.0.127
+    port: 25 # SMTP defaul port
+    subject: Ansible-Mail-Module # this field is required
+    body: System {{ ansible_hostname }} has been successfully provisioned.
+    from: mehrdad.drpc@gmail.com (Mehrdad Qasemkhani)
+    to: 
+      - mehrdad.drpc@yahoo.com
+      - mehrdad.pc@gmail.com
+    attach:
+    - /etc/group
+    - /tmp/avatar2.png
+    headers:
+      - Reply-To=mehrdad.drpc@yahoo.com
+      - X-Special="Something or other"  
+    charset: utf-8
