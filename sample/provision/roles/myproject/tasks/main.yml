@@ -482,3 +482,16 @@
     name: ntp
     state: restarted
   tags: [ntp_service, ubuntu]
+
+- name: --- rsync module ---
+  synchronize:
+    mode: pull
+    delete: no
+    archive: yes
+    compress: yes
+    # rsync_path: rsync
+    src: /home
+    dest: /tmp/rsync_mod/{{ansible_host}}
+    # rsync_opt:
+      # - "--exclude=dir1"
+  tags: [rsync_mod] 
