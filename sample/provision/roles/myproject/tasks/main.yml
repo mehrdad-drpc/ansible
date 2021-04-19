@@ -426,3 +426,57 @@
     mode: 777
     timeout: 300
   tags: [geturl_mod]
+
+  # install NTP on the client machine
+
+- name: --- install NTP over the CentOS machine(s) ---
+  yum:
+    name: ntp
+    state: present
+  tags: [install_ntp_centos]
+
+- name: --- install NTP over the debian base machine(s) ---
+  apt:
+    name: ntp
+    state: present
+  tags: [install_ntp_ubuntu]
+
+- name: --- TimeZone module --- 
+  timezone:  # set timezone to Tehran
+    name: Asia/Tehran
+  tags: [timezone_mod]
+
+- name: --- set NTP config with Template ---
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+    backup: yes
+  # notify:
+    # - restart ntp
+  tags: [timezone_mod, ntp_conf]
+
+# for centos machines
+- name: --- enable NTP service ---
+  service:
+    name: ntpd
+    enabled: yes
+  tags: [ntp_service, centos]
+
+- name: --- restart NTP service ---
+  service:
+    name: ntpd
+    state: restarted
+  tags: [ntp_service,centos]
+
+# for ubuntu machines
+- name: --- enable NTP service ---
+  service:
+    name: ntp
+    enabled: yes
+  tags: [ntp_service, ubuntu]
+
+- name: --- restart NTP service ---
+  service:
+    name: ntp
+    state: restarted
+  tags: [ntp_service, ubuntu]
