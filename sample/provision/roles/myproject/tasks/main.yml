@@ -460,6 +460,7 @@
   service:
     name: ntpd
     enabled: yes
+    state: started
   tags: [ntp_service, centos]
 
 - name: --- restart NTP service ---
@@ -473,6 +474,7 @@
   service:
     name: ntp
     enabled: yes
+    state: started
   tags: [ntp_service, ubuntu]
 
 - name: --- restart NTP service ---
