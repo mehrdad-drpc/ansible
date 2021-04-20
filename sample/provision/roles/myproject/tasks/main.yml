@@ -522,3 +522,12 @@
     state: present #absent for remove rule
     comment: Drop port 22 on remote
   tags: [iptables_mod]
+
+- name: --- Firewalld Module ---
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    zone: public
+    state: enabled
+    immediate: true
+  tags: [firewalld_mod]
