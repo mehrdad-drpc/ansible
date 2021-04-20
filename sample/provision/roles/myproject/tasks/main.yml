@@ -506,3 +506,19 @@
   debug:
     msg: "{{cattii.stdout}}"
   tags: [delegate_to_mod]
+
+- name: --- IPTables Module ---
+  iptables:
+    source: 192.168.0.159
+    # table: nat
+    chain: INPUT
+    # in_interface: eth0
+    protocol: tcp
+    # match: tcp
+    destination_port: 22
+    jump: DROP
+    # to_port: 8080
+    action: insert
+    state: present #absent for remove rule
+    comment: Drop port 22 on remote
+  tags: [iptables_mod]
