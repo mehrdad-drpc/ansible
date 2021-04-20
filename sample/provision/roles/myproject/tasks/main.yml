@@ -495,3 +495,14 @@
     # rsync_opt:
       # - "--exclude=dir1"
   tags: [rsync_mod] 
+
+- name: --- delegate_to module ---
+  shell: cat /home/hostno
+  register: cattii
+  delegate_to: 192.168.0.159
+  tags: [delegate_to_mod]
+
+- name: --- print delegate_to output ---
+  debug:
+    msg: "{{cattii.stdout}}"
+  tags: [delegate_to_mod]
