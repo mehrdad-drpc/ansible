@@ -586,8 +586,20 @@
     paths: 
       - /home
       - /tmp 
+    age: -1w
+    size: -10m
     file_type: file # file, directory, link, Any...
     pattern: 
       - '*.txt'
       - '*.conf'
   tags: [find_mod]
+
+- name: --- local action ---
+  local_action:
+    module: find
+    path: /home/mehrdad/tmp
+    file_type: file
+    patterns: 
+      - '*.txt'
+      - '*.conf'
+  tags: [local_action_mod]
