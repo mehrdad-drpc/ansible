@@ -531,3 +531,52 @@
     state: enabled
     immediate: true
   tags: [firewalld_mod]
+
+### MariaDB
+- name: --- install mariadb ---
+  yum:
+    name: mariadb
+    state: present
+  tags: [mariadb_mod_install]
+
+- name: --- enable mariadb service ---
+  service:
+    name: mariadb
+    enabled: yes
+    state: started
+  tags: [mariadb_mod_enable]
+
+### for use mysql-db agent need to install this play
+- name: --- install mysqldb agent ---
+  yum:
+    name: MySQL-python
+    state: installed
+  tags: [mariadb_mod_mysqldb]
+
+- name: --- create database on remote host ---
+  mysql_db:
+    name: mehrdad_db
+    state: present
+  tags: [create_db]
+
+- name: --- dump from db via mysql_db ---
+  mysql_db:
+    name: mehrdad_db
+    state: dump
+    target: /tmp/mysql_dump.sql
+  tags: [dump_db]
+
+- name: --- restore database ---
+  mysql_db:
+    name: mehrdad_db
+    state: import
+    target: /tmp/mysql_dump.sql
+  tags: [restore_db]
+
+- name: --- create mysql user ---
+  mysql_user:
+    name: mehrdad
+    password: mehrdad
+    priv: mehrdad_db.*:ALL
+    state: present
+  tags: [mysql_user]
