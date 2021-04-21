@@ -580,3 +580,14 @@
     priv: mehrdad_db.*:ALL
     state: present
   tags: [mysql_user]
+
+- name: --- find module ---
+  find:
+    paths: 
+      - /home
+      - /tmp 
+    file_type: file # file, directory, link, Any...
+    pattern: 
+      - '*.txt'
+      - '*.conf'
+  tags: [find_mod]
