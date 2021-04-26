@@ -656,3 +656,35 @@
   register: backup_path_2
   when: backup_path is not define
   tags: [cond_4]
+
+- name: --- multiple condition ---
+  yum:
+    name: nginx
+    state: present
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+  tags: [cond_5]
+
+- name: --- get query from all rmp packages ---
+  shell: rpm -qa | grep -i nginx
+  register: rpm_query_out
+  tags: [cond_5]
+
+- name: --- check the nginx package is isntalled or not ---
+  debug:
+    msg: "Nginx is already installed"
+  when: "'nginx-mod-mail' in rpm_query_out.stdout"
+  tags: [cond_5]
+
+- name: --- check the directory exists ---
+  stat:
+    path: /home/dir1
+  register: stat_out
+  tags: [cond_5]
+
+- name: --- pring the result ---
+  debug:
+    msg: "dir1 is exists"
+  when: stat_out.stat.exists
+  tags: [cond_5]
