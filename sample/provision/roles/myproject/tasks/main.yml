@@ -633,3 +633,19 @@
     msg: "{{ rpm_query_out.stdout_lines }}"
   when: " 'nginx-mod-mail' in rpm_query_out.stdout"
   tags: [cond_2]
+
+- name: --- gather deb/rpm package ---
+  package_facts:
+    manager: auto
+  tags: [cond_3]
+
+- name: --- print the package info ---
+  debug:
+    var: ansible_facts.packages['nginx']
+  tags: [cond_3]
+
+- name: --- check the nginx package is isntalled ---
+  debug:
+    msg: "Nginx is already installed"
+  when: "'nginx' in ansible_facts.packages"
+  tags: [cond_3]
