@@ -604,12 +604,12 @@
       - '*.conf'
   tags: [local_action_mod]
 
-# - name: --- set_fact module redhat ---
-#   set_fact: 
-#     package_name: httpd
-#   when: 
-#     ansible_os_family: "RedHat"
-#   tags: [set_fact_mod]
+- name: --- set_fact module redhat ---
+  set_fact: 
+    package_name: httpd
+  when: 
+    ansible_os_family: "RedHat"
+  tags: [set_fact_mod]
 
 - name: --- set_fact module debian ---
   set_fact: 
@@ -618,4 +618,18 @@
     ansible_os_family: "Debian"
   tags: [set_fact_mod]
 
+- name: --- print package name stdout ---
+  debug:
+    msg: "{{ package_name }}"
+  tags: [set_fact_mod]
 
+- name: --- check the package install or not ---
+  shell: rpm -qa | grep -i nginx
+  register: rpm_query_out
+  tags: [cond_2]
+
+- name: --- print the condition check ---
+  debug:
+    msg: "{{ rpm_query_out.stdout_lines }}"
+  when: " 'nginx-mod-mail' in rpm_query_out.stdout"
+  tags: [cond_2]
