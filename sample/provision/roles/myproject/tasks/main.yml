@@ -688,3 +688,14 @@
     msg: "dir1 is exists"
   when: stat_out.stat.exists
   tags: [cond_5]
+
+- name: --- check the content of file ---
+  shell: cat /home/content.txt
+  register: cat_out
+  tags: [cond_6]
+
+- name: --- condition over the file content ---
+  debug:
+    msg: "Ansible has been found in content.txt"
+  when: cat_out.stdout.find('Ansible') != -1
+  tags: [cond_6]
