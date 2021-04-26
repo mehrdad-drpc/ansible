@@ -603,3 +603,19 @@
       - '*.txt'
       - '*.conf'
   tags: [local_action_mod]
+
+# - name: --- set_fact module redhat ---
+#   set_fact: 
+#     package_name: httpd
+#   when: 
+#     ansible_os_family: "RedHat"
+#   tags: [set_fact_mod]
+
+- name: --- set_fact module debian ---
+  set_fact: 
+    package_name: apache2
+  when: 
+    ansible_os_family: "Debian"
+  tags: [set_fact_mod]
+
+
