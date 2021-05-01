@@ -776,3 +776,55 @@
     - java
     - spring
   tags: [4rd_loop]
+
+# create playbook via loops
+
+# - name: --- create playbook via loops ---
+#   pause:
+#     prompt: "Please enter your project name!"
+#   register: project_name
+#   tags: [create_pb]
+
+- name: --- create project path ---
+  file: 
+    path: "{{ansible_root}}/provision/roles/{{project_name}}"
+    state: directory
+  tags: [create_pb]
+
+- name: --- create inventory path ---
+  file: 
+    path: "{{ansible_root}}/provision/inventory"
+    state: directory
+  tags: [create_pb]
+
+- name: --- create host file ---
+  file: 
+    path: "{{ansible_root}}/provision/inventory/hosts"
+    state: touch
+  tags: [create_pb]
+
+- name: --- create ansible 7 direcotries --- 
+  file:
+    path: "/{{ansible_root}}/provision/roles/{{project_name}}/{{item}}"
+    state: directory
+  loop:
+    - default
+    - files
+    - handlers
+    - meta
+    - tasks
+    - templates
+    - vars
+  tags: [create_pb]
+
+- name: --- create `main.yml` in 5 directory ---
+  file:
+    path: "/{{ansible_root}}/provision/roles/{{project_name}}/{{item}}/main.yml"
+    state: touch
+  loop:
+    - default
+    - handlers
+    - meta
+    - tasks
+    - vars
+  tags: [create_pb]

@@ -6,3 +6,6 @@ backup_path: /tmp/bckup1
 
 var0: true
 var1: "Yes"
+
+ansible_root: /tmp/ansible-playbook
+project_name: ansible_playbook_creator
