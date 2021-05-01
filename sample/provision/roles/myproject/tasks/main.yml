@@ -828,3 +828,12 @@
     - tasks
     - vars
   tags: [create_pb]
+
+- name: --- create users via loops ---
+  user:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ users }}"
+  tags: [user_loop]
+
+  

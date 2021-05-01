@@ -9,3 +9,8 @@ var1: "Yes"
 
 ansible_root: /tmp/ansible-playbook
 project_name: ansible_playbook_creator
+
+users:
+  - mehrdad
+  - hamidreza
+  - leila
