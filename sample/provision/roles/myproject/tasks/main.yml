@@ -728,3 +728,51 @@
   # when: confirm_delete.user_input | bool
   register: confirm_delete.user_input
   tags: [ask_from_user]
+
+# Loops
+
+# standard loop
+- name: --- loops ---
+  file:
+    path: /home/{{item}}
+    state: touch
+    owner: root
+    group: root
+    mode: 0774
+  with_items:
+    - mehrdad
+    - hamid
+    - safa
+    - java
+    - spring
+  tags: [1st_loop]
+
+- name: --- install `nginx` and `gcc` on redhat machines ---
+  yum:
+    name: '{{item}}'
+    state: present
+  with_items: # this feature will be removed on version 2.11
+    - gcc
+    - nginx
+  tags: [2nd_loop]
+
+- name: --- install `nginx` and `gcc` on redhat machines  ---
+  yum:
+    name:
+      - nginx
+      - yum
+      - vim
+    state: present
+  tags: [3rd_loop]
+
+- name: --- delete created directory with new loop style ---
+  file:
+    path: /home/{{item}}
+    state: absent
+  loop:
+    - hamid
+    - mehrdad
+    - safa
+    - java
+    - spring
+  tags: [4rd_loop]
