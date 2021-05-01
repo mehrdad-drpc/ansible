@@ -604,6 +604,9 @@
       - '*.conf'
   tags: [local_action_mod]
 
+
+# Conditions
+
 - name: --- set_fact module redhat ---
   set_fact: 
     package_name: httpd
