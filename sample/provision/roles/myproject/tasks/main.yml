@@ -699,3 +699,29 @@
     msg: "Ansible has been found in content.txt"
   when: cat_out.stdout.find('Ansible') != -1
   tags: [cond_6]
+
+- name: --- boolean condition check ---
+  shell: echo "var1"
+  when: var0 or var1 | bool
+  tags: [cond_7]
+
+- name: --- print the value output ---
+  debug:
+    msg: "var0 is true"
+  when: var0 # not var0 check the false status 
+  tags: [cond_7]
+
+- name: --- ask from user ---
+  pause:
+    prompt: "do you want to delete /home/dir1 sexy boy? (yes/no)"
+  register: confirm_delete
+  tags: [ask_from_user]
+
+- name: --- check the user answer ---
+  file:
+    path: /home/dir1
+    state: absent
+  when: hostvars[play_hosts.0].confirm_delete.user_input | bool
+  # when: confirm_delete.user_input | bool
+  register: confirm_delete.user_input
+  tags: [ask_from_user]

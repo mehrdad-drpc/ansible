@@ -3,3 +3,6 @@
 listen_port: 80
 
 backup_path: /tmp/bckup1
+
+var0: true
+var1: "Yes"
