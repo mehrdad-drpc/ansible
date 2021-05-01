@@ -836,4 +836,21 @@
   loop: "{{ users }}"
   tags: [user_loop]
 
-  
+- name: --- manage multi task play ---
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  loop:
+    - { name: httpd, state: latest }
+    - { name: gcc, state: present }
+  tags: [multi_task]
+
+- name: --- create multi database on mysql ---
+  mysql_db:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - db1
+    - db2
+    - db3
+  tags: [create_dbs]
