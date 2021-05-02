@@ -12,5 +12,5 @@ project_name: ansible_playbook_creator
 
 users:
   - mehrdad
-  - hamidreza
+  - hamid
   - leila

@@ -6,7 +6,7 @@
     group: root
     mode: 0755
   tags: [create_dir]
-    
+
 - name: --- create another directory ---
   file: path=/home/dir2 state=directory owner=root group=root mode=0755
   tags: [create_dir]
@@ -31,7 +31,7 @@
   tags: [show_myvar]
 
 - name: --- command module ---
-  command: ps aux 
+  command: ps aux
   args:
     chdir: /home
     creates: /home/dir3
@@ -55,13 +55,13 @@
 - name: --- expect module ---
   expect:
     command: passwd mehrdadq
-    responses: 
+    responses:
       password: "qwe"
     # nolog: true
   tags: [expect_mod]
 
 - name: --- script module ---
-  script: script.sh   # read script from files directory
+  script: script.sh # read script from files directory
   tags: [script_mod]
 
 - name: --- shell module ---
@@ -70,7 +70,7 @@
     creates: /home/dir3
     removes: /home/dir1
   register: shell_var
-  tags: [shell_mod] 
+  tags: [shell_mod]
 
 - name: --- print - shell_var ---
   debug:
@@ -94,7 +94,7 @@
   tags: [copy_mod]
 
 - name: --- fetch module ---
-  fetch: 
+  fetch:
     src: /etc/nginx/nginx.conf
     dest: /tmp/ansible/
     flat: yes
@@ -142,7 +142,7 @@
 
 - name: --- update yum package exclude one ---
   yum:
-    name: '*'
+    name: "*"
     state: latest
     exclude: kernel*
   tags: [yum_mod_update]
@@ -166,7 +166,7 @@
 
 - name: --- remove package via apt ---
   apt:
-    name: [nginx,nginx-common]
+    name: [nginx, nginx-common]
     state: absent
     purge: yes
   tags: [apt_mod_remove]
@@ -187,12 +187,12 @@
   tags: [tmp_mod]
 
 - name: --- lineinfile module ---
-  lineinfile: 
+  lineinfile:
     path: /etc/nginx/nginx.conf
     # insertafter: ' listen       80 default_server;'
     # line: '        listen       8090 default_server;'
-    insertafter: '^#listen'
-    line: 'listen 8080'
+    insertafter: "^#listen"
+    line: "listen 8080"
     # state: absent
     backup: yes
   tags: [lineinfile_mod]
@@ -200,8 +200,8 @@
 - name: --- replace module ---
   replace:
     path: /etc/nginx/nginx.conf
-    regexp: 'listen       80 default_server;'
-    replace: 'listen       8080 default_server;'
+    regexp: "listen       80 default_server;"
+    replace: "listen       8080 default_server;"
     # after: from line number
     # before: to line number
     backup: yes
@@ -224,7 +224,7 @@
   archive:
     path: /home/dir1/*
     dest: /tmp/test.tar.gz
-    exclude_path: 
+    exclude_path:
       - file1
   tags: [archive_mod]
 
@@ -237,22 +237,22 @@
     # keepnewer: no
   tags: [unarc_mod]
 
-- name: --- wate_for module --- 
-  wait_for: 
+- name: --- wate_for module ---
+  wait_for:
     timeout: 10 #second, default value is 300
   delegate_to: localhost
   tags: [wait_for_mod]
 
 - name: --- after wait for fiished ---
-  debug: 
+  debug:
     msg: "wait for was finished"
   tags: [wait_for_mod]
 
 - name: --- wait till the string '192.168.0.127' appread in access.log file ---
-  wait_for: 
-  # follow this path till the search_regex appears
-    path: /var/log/nginx/access.log 
-    search_regex: '192.168.0.127'
+  wait_for:
+    # follow this path till the search_regex appears
+    path: /var/log/nginx/access.log
+    search_regex: "192.168.0.127"
   tags: [wait_till_for_mod]
 
 - name: --- after wait_for execution ---
@@ -269,7 +269,7 @@
   tags: [wait_for_port_mod]
 
 - name: --- ignore erroe ---
-  command: /bin/false 
+  command: /bin/false
   ignore_errors: yes
   tags: [ignore_err]
 
@@ -282,7 +282,7 @@
   tags: [yum_async_update]
 
 - name: --- Fire and Forget --- # run parallel tasks
-  yum: 
+  yum:
     name: "*"
     state: latest
   async: 7200
@@ -290,19 +290,19 @@
   tags: [fireandforget]
 
 - name: --- next task is running ---
-  debug: 
+  debug:
     msg: "Next Task is Running"
   tags: [fireandforget]
 
 - name: --- wait for connection module ---
-  wait_for_connection: 
+  wait_for_connection:
     timeout: 300 # maximum wait time for, in second for specific task
     delay: 10 # first delay in second
     sleep: 5 # each interval to check task in second
   tags: [wait_for_connection_mod]
 
 - name: --- check waiting connection module ---
-  debug: 
+  debug:
     msg: "wait for connection has been passed"
   tags: [wait_for_connection_mod]
 
@@ -319,7 +319,7 @@
   tags: [reboot_hosts]
 
 - name: --- wait for connection module ---
-  wait_for_connection: 
+  wait_for_connection:
     timeout: 300 # maximum wait time for, in second for specific task
     delay: 10 # first delay in second
     sleep: 5 # each interval to check task in second
@@ -348,7 +348,7 @@
 #     subject: Ansible-Mail-Module # this field is required
 #     body: System {{ ansible_hostname }} has been successfully provisioned.
 #     from: mehrdad.drpc@gmail.com (Mehrdad Qasemkhani)
-#     to: 
+#     to:
 #       - mehrdad.drpc@yahoo.com
 #       - mehrdad.pc@gmail.com
 #     attach:
@@ -356,7 +356,7 @@
 #     - /tmp/avatar2.png
 #     headers:
 #       - Reply-To=mehrdad.drpc@yahoo.com
-#       - X-Special="Something or other"  
+#       - X-Special="Something or other"
 #     charset: utf-8
 #   tags: [mail_mod, notif]
 
@@ -382,7 +382,7 @@
 #     username: 'Ansible on {{ inventory_hostname }}'
 #     icon_url: https://mycompany.ir/image-file.png
 #   tags: [mattermost_mod, notif]
-  
+
 # - name: --- Send notify to Telegram ---
 #   community.general.telegram:
 #     token: '9999999:XXXXXXXXXXXXXXXXXXXXXXX'
@@ -403,8 +403,8 @@
     revision: "5"
   tags: [svn_mod]
 
-- name: --- install git over CentOS machine --- 
-  yum: 
+- name: --- install git over CentOS machine ---
+  yum:
     name: git
     state: present
   tags: [install_git]
@@ -427,8 +427,8 @@
     timeout: 300
   tags: [geturl_mod]
 
-  # install NTP on the client machine
 
+  # install NTP on the client machine
 - name: --- install NTP over the CentOS machine(s) ---
   yum:
     name: ntp
@@ -441,8 +441,8 @@
     state: present
   tags: [install_ntp_ubuntu]
 
-- name: --- TimeZone module --- 
-  timezone:  # set timezone to Tehran
+- name: --- TimeZone module ---
+  timezone: # set timezone to Tehran
     name: Asia/Tehran
   tags: [timezone_mod]
 
@@ -452,7 +452,7 @@
     dest: /etc/ntp.conf
     backup: yes
   # notify:
-    # - restart ntp
+  # - restart ntp
   tags: [timezone_mod, ntp_conf]
 
 # for centos machines
@@ -467,7 +467,7 @@
   service:
     name: ntpd
     state: restarted
-  tags: [ntp_service,centos]
+  tags: [ntp_service, centos]
 
 # for ubuntu machines
 - name: --- enable NTP service ---
@@ -493,8 +493,8 @@
     src: /home
     dest: /tmp/rsync_mod/{{ansible_host}}
     # rsync_opt:
-      # - "--exclude=dir1"
-  tags: [rsync_mod] 
+    # - "--exclude=dir1"
+  tags: [rsync_mod]
 
 - name: --- delegate_to module ---
   shell: cat /home/hostno
@@ -583,15 +583,15 @@
 
 - name: --- find module ---
   find:
-    paths: 
+    paths:
       - /home
-      - /tmp 
+      - /tmp
     age: -1w
     size: -10m
     file_type: file # file, directory, link, Any...
-    pattern: 
-      - '*.txt'
-      - '*.conf'
+    pattern:
+      - "*.txt"
+      - "*.conf"
   tags: [find_mod]
 
 - name: --- local action ---
@@ -599,25 +599,24 @@
     module: find
     path: /home/mehrdad/tmp
     file_type: file
-    patterns: 
-      - '*.txt'
-      - '*.conf'
+    patterns:
+      - "*.txt"
+      - "*.conf"
   tags: [local_action_mod]
-
 
 # Conditions
 
 - name: --- set_fact module redhat ---
-  set_fact: 
+  set_fact:
     package_name: httpd
-  when: 
+  when:
     ansible_os_family: "RedHat"
   tags: [set_fact_mod]
 
 - name: --- set_fact module debian ---
-  set_fact: 
+  set_fact:
     package_name: apache2
-  when: 
+  when:
     ansible_os_family: "Debian"
   tags: [set_fact_mod]
 
@@ -711,7 +710,7 @@
 - name: --- print the value output ---
   debug:
     msg: "var0 is true"
-  when: var0 # not var0 check the false status 
+  when: var0 # not var0 check the false status
   tags: [cond_7]
 
 - name: --- ask from user ---
@@ -749,7 +748,7 @@
 
 - name: --- install `nginx` and `gcc` on redhat machines ---
   yum:
-    name: '{{item}}'
+    name: "{{item}}"
     state: present
   with_items: # this feature will be removed on version 2.11
     - gcc
@@ -786,24 +785,24 @@
 #   tags: [create_pb]
 
 - name: --- create project path ---
-  file: 
+  file:
     path: "{{ansible_root}}/provision/roles/{{project_name}}"
     state: directory
   tags: [create_pb]
 
 - name: --- create inventory path ---
-  file: 
+  file:
     path: "{{ansible_root}}/provision/inventory"
     state: directory
   tags: [create_pb]
 
 - name: --- create host file ---
-  file: 
+  file:
     path: "{{ansible_root}}/provision/inventory/hosts"
     state: touch
   tags: [create_pb]
 
-- name: --- create ansible 7 direcotries --- 
+- name: --- create ansible 7 direcotries ---
   file:
     path: "/{{ansible_root}}/provision/roles/{{project_name}}/{{item}}"
     state: directory
@@ -856,9 +855,20 @@
   tags: [create_dbs]
 
 - name: --- create multiple user for database ---
-  mysql_db:
+  mysql_user:
     name: "{{ item }}"
     password: 12345
     state: present
   loop: "{{ users }}"
   tags: [create_user_db]
+
+- name: --- set database users priviledge via nested loop ---
+  mysql_user:
+    name: "{{ item[0] }}"
+    priv: "{{ item[1] }}.*:ALL"
+    append_privs: yes
+    login_user: root
+  with_nested:
+    - ["hamid", "leila"]
+    - ["db1", "db2", "db3"]
+  tags: [nested_loop]
