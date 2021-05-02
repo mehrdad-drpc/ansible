@@ -14,3 +14,8 @@ users:
   - mehrdad
   - hamid
   - leila
+
+dict:
+  Env: production
+  App: my-app
+  Ver: v1.7

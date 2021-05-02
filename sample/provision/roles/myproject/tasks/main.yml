@@ -873,3 +873,9 @@
     - ["hamid", "leila"]
     - ["db1", "db2", "db3"]
   tags: [nested_loop]
+
+- name: --- loop over dictionary/hashmap ---
+  debug:
+    msg: "{{ item.key }} - {{ item.value }}"
+  loop: "{{ dict | dict2items }}"
+  tags: [loop_over_dict]
