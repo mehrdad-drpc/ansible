@@ -868,6 +868,7 @@
     priv: "{{ item[1] }}.*:ALL"
     append_privs: yes
     login_user: root
+    # password: root-pass
   with_nested:
     - ["hamid", "leila"]
     - ["db1", "db2", "db3"]
