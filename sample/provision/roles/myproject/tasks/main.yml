@@ -854,3 +854,11 @@
     - db2
     - db3
   tags: [create_dbs]
+
+- name: --- create multiple user for database ---
+  mysql_db:
+    name: "{{ item }}"
+    password: 12345
+    state: present
+  loop: "{{ users }}"
+  tags: [create_user_db]
