@@ -905,3 +905,10 @@
     index_var: my_index
   tags: [loop_with_item_index]
 
+- name: --- Retry Until the target is met ---
+  shell: cat /home/result.txt
+  register: result
+  until: result.stdout.find('ansible') != -1
+  retries: 3
+  delay: 10
+  tags: [retry_until]
