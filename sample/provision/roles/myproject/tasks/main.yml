@@ -879,3 +879,29 @@
     msg: "{{ item.key }} - {{ item.value }}"
   loop: "{{ dict | dict2items }}"
   tags: [loop_over_dict]
+
+- name: --- loop over inventory ---
+  debug:
+    msg: "{{ item }}"
+  loop: "{{ groups['all'] }}"
+  tags: [loop_over_inv]
+
+- name: --- loop over inventory with different shape with loop control ---
+  debug:
+    msg: "{{ item }}"
+  loop: "{{ ansible_play_batch }}"
+  loop_control:
+    pause: 5
+  tags: [loop_over_inv_2]
+
+- name: --- index counting via loop ---
+  debug:
+    msg: "{{ item }} --> {{ my_index }}"
+  loop:
+    - first
+    - second
+    - third
+  loop_control:
+    index_var: my_index
+  tags: [loop_with_item_index]
+
