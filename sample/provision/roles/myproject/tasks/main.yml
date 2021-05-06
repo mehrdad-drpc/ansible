@@ -884,7 +884,7 @@
   debug:
     msg: "{{ item }}"
   loop: "{{ groups['all'] }}"
-  tags: [loop_over_inv]
+  tags: [loop_over_inventory]
 
 - name: --- loop over inventory with different shape with loop control ---
   debug:
