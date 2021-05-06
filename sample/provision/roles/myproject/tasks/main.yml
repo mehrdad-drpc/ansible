@@ -778,11 +778,11 @@
 
 # create playbook via loops
 
-- name: --- create playbook via loops ---
-  pause:
-    prompt: "Please enter your project name!"
-  register: project_name
-  tags: [create_pb]
+# - name: --- create playbook via loops ---
+#   pause:
+#     prompt: "Please enter your project name!"
+#   register: project_name
+#   tags: [create_pb]
 
 - name: --- create playbook project path ---
   file:
