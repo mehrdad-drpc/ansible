@@ -1,6 +1,6 @@
 # ansible_port: 7722
 
-listen_port: 80
+listen_port: 8088
 
 backup_path: /tmp/bckup1
 

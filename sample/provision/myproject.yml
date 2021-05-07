@@ -1,3 +1,5 @@
 - hosts: myservers
   roles:
     - myproject
+
+# - import_playbook: myproject2.yml
