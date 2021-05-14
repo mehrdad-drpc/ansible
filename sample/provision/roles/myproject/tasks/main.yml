@@ -713,20 +713,41 @@
   when: var0 # not var0 check the false status
   tags: [cond_7]
 
-- name: --- ask from user ---
+- name: --- ask from user pre-define variable ---
   pause:
-    prompt: "do you want to delete /home/dir1 sexy boy? (yes/no)"
+    prompt: "do you want to delete /home/dir1? (yes/no)"
   register: confirm_delete
-  tags: [ask_from_user]
+  tags: [ask_from_user_static]
 
-- name: --- check the user answer ---
+- name: --- check the user answer non-interactive ---
   file:
     path: /home/dir1
     state: absent
   when: hostvars[play_hosts.0].confirm_delete.user_input | bool
-  # when: confirm_delete.user_input | bool
-  register: confirm_delete.user_input
-  tags: [ask_from_user]
+  tags: [ask_from_user_static]
+
+- name: --- ask from user interactive mode ---
+  pause:
+    prompt: "do you want to delete /home/dir1? (yes/no)"
+  register: user_prompt
+  tags: [ask_from_user_interactive]
+
+- name: --- show the 'user_prompt' value ---
+  debug: 
+    msg: "The value of user_prompt is: {{ user_prompt }}"
+  tags: [ask_from_user_interactive]
+
+- name: --- check the user answer in global variable ---
+  file:
+    path: /home/dir1
+    state: absent
+  when: user_prompt_2 == True
+  tags: [ask_from_user_interactive]
+
+- name: --- show the 'user_prompt' value ---
+  debug: 
+    msg: "The value of username is: {{ username }} and the password is: {{ password }}"
+  tags: [user_pass_prompt]
 
 # Loops
 
@@ -912,6 +933,9 @@
   retries: 3
   delay: 10
   tags: [retry_until]
+
+# Handler
+# Handlers just use to change the service status 
 
 - name: --- template module ---
   template:
