@@ -10,6 +10,8 @@ var1: "Yes"
 ansible_root: /tmp/ansible-playbook
 # project_name: ansible_playbook_creator
 
+project_name: nfs
+
 users:
   - mehrdad
   - hamid
