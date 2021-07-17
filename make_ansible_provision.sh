@@ -1,26 +1,41 @@
 #!/bin/bash
 
+function bold_echo {
+  echo -e "\e[1m###### $1...\e[0m"
+}
+
+function success {
+  echo -e "\e[42m\e[1m###### [DONE]\e[0m\e[49m"
+}
+
+function fail {
+  echo -e "\e[41m\e[1m###### [FAILED]\e[0m\e[49m"
+  exit 1
+}
+
 #rm -rf provision
 
-# get project name
-echo "Enter your project name:"  
-read project_name  
+bold_echo "get project name"
+echo "Enter your project name:" || fail
+read project_name || fail
+success;
 
-# make provision directory
-mkdir provision
-cd provision
+bold_echo "make provision directory"
+mkdir provision && cd provision || fail
+success;
 
-# make host inventory
-mkdir inventory
-touch inventory/hosts
-cat << EOF > ./inventory/hosts
+bold_echo "make host inventory"
+mkdir inventory || fail
+touch inventory/hosts || fail
+cat << EOF > ./inventory/hosts 
 [hostlist1]
 [hostlist2]
 EOF
+success;
 
-# make project file
-touch $project_name.yml
-cat << EOF > $project_name.yml
+bold_echo "make project file"
+touch $project_name.yml || fail
+cat <<EOF >$project_name.yml
 - name: something about your playbook
   hosts: <<host_name>>
   roles:
@@ -30,28 +45,41 @@ cat << EOF > $project_name.yml
     key2: val2
   become: true/false
 EOF
+success;
 
-# make roles direcory with all subdirectories
-mkdir -p roles/$project_name
+bold_echo "make roles direcory with all subdirectories"
+mkdir -p roles/$project_name || fail
+success;
 
-mkdir roles/$project_name/vars
-touch roles/$project_name/vars/main.yml
+bold_echo "make vars directory"
+mkdir roles/$project_name/vars || fail
+touch roles/$project_name/vars/main.yml || fail
+success;
 
-mkdir roles/$project_name/defaults
-touch roles/$project_name/defaults/main.yml
+bold_echo "make defualts directory"
+mkdir roles/$project_name/defaults || fail
+touch roles/$project_name/defaults/main.yml || fail
+success;
 
-mkdir roles/$project_name/tasks
-touch roles/$project_name/tasks/main.yml
+bold_echo "make tasks directory"
+mkdir roles/$project_name/tasks || fail
+touch roles/$project_name/tasks/main.yml || fail
+success;
 
-mkdir roles/$project_name/handlers
-touch roles/$project_name/handlers/main.yml
+bold_echo "make hanldlers directory"
+mkdir roles/$project_name/handlers || fail
+touch roles/$project_name/handlers/main.yml || fail
+success;
 
-mkdir roles/$project_name/meta
-touch roles/$project_name/meta/main.yml
+bold_echo "make meta directory"
+mkdir roles/$project_name/meta || fail
+touch roles/$project_name/meta/main.yml || fail
+success;
 
-mkdir roles/$project_name/file
+bold_echo "make file directory"
+mkdir roles/$project_name/file || fail
+success;
 
-mkdir roles/$project_name/templates
-
-
-
+bold_echo "make tamplates directory"
+mkdir roles/$project_name/templates || fail
+success;
