@@ -1,13 +1,18 @@
 - hosts: myservers
-  
+
+  gather_facts: false
+
+  vars_prompt:
+      name: "Version"
+      prompt: "Which version Do you want to install?"
+
   # vars_prompt:
-    
   #   - name: username 
   #     prompt: what is your username?
   #     private: no
-
   #   - name: password
   #     prompt: enter your password
+
 
   roles:
     - myproject

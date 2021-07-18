@@ -797,6 +797,11 @@
     - spring
   tags: [4rd_loop]
 
+- name: --- Ansible prompt example ---
+  debug:
+    msg: "{{ Version }}"
+  tags: [var_promt_mod]
+
 # create playbook via loops
 
 # - name: --- create playbook via loops ---
