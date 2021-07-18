@@ -13,6 +13,7 @@ ansible_root: /tmp/ansible-playbook
 project_name: nfs
 
 users:
+  - root
   - mehrdad
   - hamid
   - leila

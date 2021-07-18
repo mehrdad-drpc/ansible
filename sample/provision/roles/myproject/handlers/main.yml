@@ -1,4 +1,10 @@
-- name: my_nginx
+- name: restart my_nginx service
   service:
     name: nginx
     state: restarted
+
+- name: restart tomcat service
+  service: 
+    name: tomcat
+    state: restarted
+  

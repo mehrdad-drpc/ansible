@@ -1,13 +1,13 @@
 - hosts: myservers
   
-  vars_prompt:
+  # vars_prompt:
     
-    - name: username 
-      prompt: what is your username?
-      private: no
+  #   - name: username 
+  #     prompt: what is your username?
+  #     private: no
 
-    - name: password
-      prompt: enter your password
+  #   - name: password
+  #     prompt: enter your password
 
   roles:
     - myproject
