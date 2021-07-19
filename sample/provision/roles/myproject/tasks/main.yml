@@ -48,6 +48,10 @@
   command: yum install -y python3-pip
   tags: [install_pexpect]
 
+- name: --- install python over the clinets machines ---
+  command: apt install -y python3-pip
+  tags: [install_py]
+
 - name: --- install pexpect via pip ---
   command: pip3 install pexpect
   tags: [install_pexpect]
@@ -950,3 +954,34 @@
     - my_nginx # call the corresponding handler
   tags: [1st_handler]
 
+### Ansible vault section
+ 
+- name: --- set pass for vault 1 ---
+  set_fact:
+    mypass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          39313834373834353437623333656437376433383365383635363864306662613966383263353430
+          6531613238323131376239633732303866643431636533630a336330303534646262356234623265
+          65633263373434376334633132356330613937633335336661356165643236653838333532376239
+          6232393038333836320a613831313032643232393037616236343766653634313639623761303731
+          6663
+  tags: vault_1
+
+- name: --- show pass from vault 1 ---
+  debug: 
+    msg: "my passwrod is {{ mypass }}"
+  tags: vault_1
+
+- name: --- create encrypted user ---
+  user:
+    name: mehrdadq
+    state: present
+    shell: /bin/bash
+    password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          34363638626236383334383932386439333038646364663231343231356538393166316436343964
+          3735336663623861383863326437306130623535346338390a616532333861346632373931393938
+          30643237323165656136303336663436666164656332396165353964303931313233623062613638
+          3361613161326364350a656363323237356164626264656238366435393937333737613266313833
+          3035
+  tags: [create_encrypted_user]

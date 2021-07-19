@@ -2,9 +2,9 @@
 
   gather_facts: false
 
-  vars_prompt:
-      name: "Version"
-      prompt: "Which version Do you want to install?"
+  # vars_prompt:
+  #     name: "Version"
+  #     prompt: "Which version Do you want to install?"
 
   # vars_prompt:
   #   - name: username 
