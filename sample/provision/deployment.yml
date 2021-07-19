@@ -1,7 +1,7 @@
 - name: something about your playbook
   hosts: <<host_name>>
   roles:
-    - spara-ansible
+    - deployment
   vars:
     key1: val1
     key2: val2
