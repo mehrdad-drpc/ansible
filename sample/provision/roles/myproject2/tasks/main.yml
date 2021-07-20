@@ -64,6 +64,22 @@
   register: rpm_out
   tags: check
 
+- name: ----- check nginx is installed in new way -----
+  package_facts:
+    manager: auto
+  tags: check_new
+
+- name: ----- watch the 'package facts' output -----
+  debug:
+    var: ansible_facts.packages['nginx']
+  tags: check_new
+
+- name: ----- if nginx installed -----
+  debug:
+    msg: "nginx is installed"
+  when: "'nginx' in ansible_facts.packages"
+  tags: chekc_new
+
 - name: ----- debug -----
   debug:
      msg: "nginx-mod-mail is installed"
