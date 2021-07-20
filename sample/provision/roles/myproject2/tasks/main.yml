@@ -64,6 +64,12 @@
   register: rpm_out
   tags: check
 
+- name: ----- check nginx-mod-main is installed -----
+  debug:
+     msg: "nginx-mod-mail is installed"
+  when: "'nginx-mod-mail' in rpm_out.stdout"
+  tags: check
+
 - name: ----- check nginx is installed in new way -----
   package_facts:
     manager: auto
@@ -80,11 +86,6 @@
   when: "'nginx' in ansible_facts.packages"
   tags: chekc_new
 
-- name: ----- debug -----
-  debug:
-     msg: "nginx-mod-mail is installed"
-  when: "'nginx-mod-mail' in rpm_out.stdout"
-  tags: check
 
 - name: ----- check if /home/dir1 exists -----
   stat:
