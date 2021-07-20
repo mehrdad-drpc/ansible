@@ -1,6 +1,0 @@
-- name: --- simple tatk for import to enother project ---
-  debug:
-    msg: "Hello from Project 2"
-  tags: [retry_until]
-
-- import_tasks: task2.yml

@@ -1,4 +1,0 @@
-- name: --- Project 2 Task 2 ---
-  debug:
-    msg: "Hello from task 2 from project 2"
-  # tags: [retry_until]
