@@ -97,3 +97,11 @@
     msg: "/home/dir1 exists"
   when: stat_out.stat.exists
   tags: stat_mod
+
+- name: ----- check a variable is define or not -----
+  pause:
+    prompt: "The variable 'backup_path' is not define, please provide it!"
+  register: backup_path2
+  when: backup_path is not define
+  tags: pause_mod
+
