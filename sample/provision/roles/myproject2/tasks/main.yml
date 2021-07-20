@@ -1,0 +1,83 @@
+- name: ----- install mariadb -----
+  yum:
+        name: mariadb-server
+        state: installed
+  tags: mariadb
+
+- name: ----- enable and start mariadb -----
+  service:
+        name: mariadb
+        enabled: yes
+        state: started
+  tags: mariadb
+
+- name: ----- Install mysql-python ------
+  yum:
+        name: MySQL-python
+        state: installed
+  tags: install_mysql_python
+
+- name: ------ create a database ------
+  mysql_db:
+        name: mydb
+        state: present
+  tags: mysql_db_mod
+
+- name: ----- dump a db -----
+  mysql_db:
+        name: mydb
+        state: dump
+        target: /home/mydb_dump.sql
+  tags: dump_db
+
+- name: ----- list mariab packages -----
+  shell: rpm -qa | grep mariadb
+  register: mariadb_rpm
+  tags: check_mariadb_server
+
+- name: ----- chaeck if mariadb-server is installed -----
+  debug:
+        msg: "mariadb-server is installed"
+  when: "'mariadb-server' in mariadb_rpm.stdout"
+  tags: check_mariadb_server
+
+- name: ---install nginx :D ---
+  yum:
+    name: nginx
+    state: present
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_major_version == "7"
+  tags: install_nginx_centos
+
+- name: ----- install nginx on centos 7 -----
+  yum:
+     name: [epel-release,nginx]
+     state: present
+  when:
+      - ansible_distribution == "CentOS"
+      - ansible_distribution_major_version == "7"
+  tags: [install_nginx_CentOS7]
+
+- name: ----- check if nginx-mod-mail is installed -----
+  shell: "rpm -qa | grep nginx"
+  register: rpm_out
+  tags: check
+
+- name: ----- debug -----
+  debug:
+     msg: "nginx-mod-mail is installed"
+  when: "'nginx-mod-mail' in rpm_out.stdout"
+  tags: check
+
+- name: ----- check if /home/dir1 exists -----
+  stat:
+      path: /home/dir1
+  register: stat_out
+  tags: stat_mod
+
+- name: ----- debug stat -----
+  debug:
+      msg: "/home/dir1 exists"
+  when: stat_out.stat.exists
+  tags: stat_mod                
