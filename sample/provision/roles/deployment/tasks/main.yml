@@ -69,4 +69,3 @@
     name: tomcat
     state: restarted
   tags: [restart_tomcat]
-
