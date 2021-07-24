@@ -33,7 +33,7 @@ bold_echo "make host inventory"
 if [ ! -d "inventory" ]; then
   mkdir inventory || fail
   touch inventory/hosts || fail
-  cat <<EOF >./inventory/hosts
+  cat << EOF > ./inventory/hosts
     [hostlist1]
     [hostlist2]
 EOF
@@ -44,7 +44,7 @@ success
 
 bold_echo "make project file"
 touch $project_name.yml || fail
-cat <<EOF >$project_name.yml
+cat << EOF > $project_name.yml
 - name: something about your playbook
   hosts: <<host_name>>
   roles:
