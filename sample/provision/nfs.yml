@@ -1,3 +1,4 @@
-- hosts: myservers
+---
+- hosts: nfs_nodes
   roles:
    - nfs 

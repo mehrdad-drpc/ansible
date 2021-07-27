@@ -1,8 +1,19 @@
 [myservers]
 172.16.10.141
-172.16.10.172
-172.16.10.143
+172.16.10.183
+172.16.10.173
 
 
 [myservers:vars]
 http_port=80
+
+[nfs_server]
+172.16.10.141 server_role=nfsserver
+
+[nfs_client]
+172.16.10.183 server_role=nfsclient
+172.16.10.173 server_role=nfsclient
+
+[nfs_nodes:children]
+nfs_server
+nfs_client

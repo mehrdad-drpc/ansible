@@ -1,0 +1,80 @@
+- name: --- install nfs server ---
+  apt:
+    name: nfs-kernel-server
+    state: present
+  when: server_role=='nfs_server'
+  tags: [install_package]
+
+- name: --- install nfs client ---
+  apt:
+    name: nfs-common
+    state: present
+  when: server_role=='nfs_client'
+  tags: [install_package]
+
+- name: --- enable & start services ---
+  service:
+    name: "{{item}}"
+    enabled: yes
+    state: started
+  with_items:
+    - nfs-kernel-server.service
+    - nfs-common.service
+  tags: [enable_start_service]
+
+- name: --- allow nfs into ufw ---
+  ufw:
+    rule: allow
+    port: "2049"
+  loop:
+    - 22
+    - 2049
+  tags: [allow_ufw]
+
+- name: --- create shared directory ---
+  file:
+    path: /data1
+    state: directory
+    owner: nfsnobody
+    group: nfsnobody
+    mode: 755
+  tags: [create_shared_directory]
+
+- name: --- create /etc/export ---
+  file:
+    path: /etc/export
+    state: touch
+  tags: [create_exports]
+
+- name: --- config /etc/export on nfs server ---
+  lineinfile:
+    path: /etc/export
+    line: "/data1 {{item}}(rw,sync,no_root_squash,no_subtree_check)"
+  with_items:
+    - "{{groups.nfs_client}}"
+  when: server_role=='nfs_server'
+  tags: [config_server_export]
+
+- name: --- config /etc/export on nfs clients ---
+  lineinfile:
+    path: /etc/export
+    line: "/data1 {{item}}(rw,sync,no_root_squash,no_subtree_check)"
+  with_items:
+    - "{{groups.nfs_server}}"
+  when: server_role=='nfs_client'
+  tags: [config_client_export]
+
+- name: --- execute exportfs commond ---
+  shell: "exportfs -arv"
+  tags: [export_fs]
+
+- name: --- mount nfs clients ---
+  mount:
+    src: "{{item}}:/data1"
+    path: /data1
+    opts: rm,sync,hard,intr
+    state: mounted
+    fstype: nfs
+  with_items:
+    - "{{groups.nfs_client}}"
+  when: server_role=='nfs_client'
