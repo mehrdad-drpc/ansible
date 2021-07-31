@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# script name: ansible playbook creator
+# author: mehrdad qasemkhani
+# date of creation: refer to the first commit date
+# description: with this script you do not need to create playbook manually, just enter your project name :)
+
 function bold_echo {
   echo -e "\e[1m###### $1...\e[0m"
 }
