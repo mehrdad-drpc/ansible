@@ -1,0 +1,26 @@
+- name: --- stop tomcat ---
+  service:
+    name: tomcat
+    state: stopped
+  tags: [stop_tomcat]
+
+- name: --- remote old war ---
+  file:
+    path: "{{item}}"
+    state: absent
+  with_items:
+    - "{{tomcat_path}}/webapps/hello-world"
+    - "{{tomcat_path}}/webapps/hello-world.war"
+  tags: [remote_old_war]
+
+- name: --- deploy new war ---
+  copy:
+    src: "{{new_war_path}}"
+    dest: "{{tomcat_path}}/webpass/hello-world.war"
+  tags: [deploy_war]
+
+- name: --- start tomcat service ---
+  service:
+    name: tomcat
+    state: started
+  tags: [start_tomcat]
