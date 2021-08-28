@@ -1,0 +1,71 @@
+- name: --- install java ---
+  apt:
+    name: openjdk-8-jdk
+    state: present
+  tags: [java]
+
+- name: --- download apache tomcat ---
+  get_url:
+    url: "{{tomcat_url}}"
+    dest: /opt
+  tags: [tomcat]
+
+- name: --- extract and install apache tomcat ---
+  unarchive:
+    src: "{{tomcat_path}}.tar.gz"
+    dest: /opt
+    remote_src: yes
+  tags: [tomcat]
+
+- name: --- create tomcat link ---
+  file:
+    src: "{{tomcat_path}}"
+    dest: /opt/tomcat
+    state: link
+  tags: [tomcat]
+
+- name: --- create tomcat service ---
+  template:
+    src: tomcat.service.j2
+    dest: /etc/systemd/system/tomcat.service
+  tags: [tomcat]
+
+- name: --- configure server.xml ---
+  template:
+    src: server.xml.j2
+    dest: /opt/tomcat/conf/server.xml
+  tags: [tomcat]
+
+- name: --- restart tomcat service ---
+  systemd:
+    daemon_reload: yes
+  tags: [systemd_reload]
+
+- name: --- enable and start tomcat ---
+  service:
+    name: tomcat
+    enabled: yes
+    state: started
+  tags: [tomcat_service]
+
+- name: --- deploy war to tamcat ---
+  copy:
+    src: hello-world.war
+    dest: /opt/tomcat/webapps/hello_world.war
+  tags: [deploy_war]
+
+- name: --- configure firewall ---
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{tomcat_port}}"
+    jump: ACCEPT
+    action: insert
+    state: present
+  tags: [firewall]
+
+- name: --- restart tomcat ---
+  service:
+    name: tomcat
+    state: restarted
+  tags: [restart_tomcat]

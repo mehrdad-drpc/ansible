@@ -1,8 +1,5 @@
-- name: something about your playbook
-  hosts: <<host_name>>
+- name: apache tomcat web-server
+  hosts: myservers
   roles:
     - deploy-japp
-  vars:
-    key1: val1
-    key2: val2
-  become: true/false
+  become: true 
