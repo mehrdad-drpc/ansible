@@ -1,80 +1,115 @@
-- name: --- install nfs server ---
-  apt:
-    name: nfs-kernel-server
-    state: present
-  when: server_role=='nfs_server'
-  tags: [install_package]
+# - name: --- install firewalld and nfs-utils ---
+#   yum:
+#     name: "{{ item }}"
+#     state: present
+#   loop:
+#     - firewalld
+#     - nfs-utils
+#   tags: install_package
 
-- name: --- install nfs client ---
+- name: --- install ufw and nfs-utils via LIST on SERVER ---
   apt:
-    name: nfs-common
+    name: [ufw, nfs-kernel-server]
     state: present
-  when: server_role=='nfs_client'
-  tags: [install_package]
+  tags: install_package
+  when: server_role=='nfsserver'
 
-- name: --- enable & start services ---
+- name: --- install firewalld and nfs-utils via LIST on CLIENTS ---
+  yum:
+    name: [firewalld, nfs-utils]
+    state: present
+  tags: install_package
+  when: server_role=='nfsclient'
+
+- name: --- enable and start services on SERVER  ---
   service:
-    name: "{{item}}"
+    name: "{{ item }}"
     enabled: yes
     state: started
-  with_items:
-    - nfs-kernel-server.service
-    - nfs-common.service
-  tags: [enable_start_service]
+  loop:
+    - nfs-server
+    - ufw
+  when: server_role=='nfsserver'
+  tags: [nfs_server_services]
 
-- name: --- allow nfs into ufw ---
+- name: --- enable and start services on CLIENTS ---
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop:
+    - nfs-utils
+    - firewalld
+  when: server_role=='nfsclient'
+  tags: [nfs_client_services]
+
+- name: --- allow nfs ports into ufw on SERVER ---
   ufw:
     rule: allow
-    port: "2049"
+    port: "{{ item }}"
   loop:
     - 22
     - 2049
+  when: server_role=='nfsserver'
   tags: [allow_ufw]
+
+- name: --- open port on CLIENTS over the firewalld ---
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    zone: public
+    state: enabled
+    immediate: true
+  loop:
+    - ssh
+    - nfs
+  when: server_role=='nfsclient'
+  tags: [allow_firewalld]
 
 - name: --- create shared directory ---
   file:
     path: /data1
     state: directory
-    owner: nfsnobody
-    group: nfsnobody
-    mode: 755
-  tags: [create_shared_directory]
+    mode: 0755
+  tags: [create_shared_dir]
 
-- name: --- create /etc/export ---
+- name: --- create /etc/exports ---
   file:
-    path: /etc/export
+    path: /etc/exports
     state: touch
   tags: [create_exports]
 
-- name: --- config /etc/export on nfs server ---
+- name: --- write nfs config into the /etc/exports file on SERVER ---
   lineinfile:
-    path: /etc/export
-    line: "/data1 {{item}}(rw,sync,no_root_squash,no_subtree_check)"
-  with_items:
+    path: /etc/exports
+    line: "/data1 {{ item }}(rw,sync,no_root_squash,no_subtree_check)"
+  loop:
     - "{{groups.nfs_client}}"
-  when: server_role=='nfs_server'
-  tags: [config_server_export]
+  when: server_role=='nfsserver'
+  tags: [config_server_exports]
 
-- name: --- config /etc/export on nfs clients ---
+- name: --- write nfs config into the /etc/exports file on CLIENTS ---
   lineinfile:
-    path: /etc/export
-    line: "/data1 {{item}}(rw,sync,no_root_squash,no_subtree_check)"
-  with_items:
-    - "{{groups.nfs_server}}"
-  when: server_role=='nfs_client'
-  tags: [config_client_export]
+    path: /etc/exports
+    line: "/data1 {{ item }}(rw,sync,no_root_squash,no_subtree_check)"
+  loop:
+    - "{{ groups.nfs_server }}"
+  when: server_role=='nfsclient'
+  tags: [config_client_exports]
 
-- name: --- execute exportfs commond ---
-  shell: "exportfs -arv"
-  tags: [export_fs]
+- name: --- run exportfs commmand ---
+  shell:
+    cmd: exportfs -arv
+  tags: [run_exportfs]
 
 - name: --- mount nfs clients ---
   mount:
-    src: "{{item}}:/data1"
+    src: "{{ item }}:/data1"
     path: /data1
-    opts: rm,sync,hard,intr
+    opts: rw,sync,hard,intr
     state: mounted
     fstype: nfs
   with_items:
-    - "{{groups.nfs_client}}"
-  when: server_role=='nfs_client'
+    - "{{ groups.nfs_server }}"
+  when: server_role=='nfsclient'
+  tags: [mount_nfs_clients]
