@@ -17,3 +17,14 @@ http_port=80
 [nfs_nodes:children]
 nfs_server
 nfs_client
+
+[haproxy_server]
+192.168.0.159 server_role=haserver
+
+[nginx_servers]
+192.168.0.187:2022 server_role=haclient
+192.168.0.182 server_role=haclient
+
+[ha_nodes:children]
+nfs_server
+nfs_client
