@@ -1,0 +1,25 @@
+- name: --- set HAProxy address to nginx machine hosts ---
+  lineinfile:
+    path: /etc/hosts
+    insertafter: EOF
+    line: '192.168.0.159   haproxy'
+  tags: [haproxy_host]
+
+- name: --- install nginx & epel-release over centos machines ---
+  yum:
+    name: [nginx, epel-release]
+    state: present
+  tags: [install_nginx]
+
+- name: --- edit index.html file ---
+  copy:
+    content: '<h1>Hello from {{ ansible_hostname }}</h1>'
+    dest: /usr/share/nginx/html/index.html
+  tags: [edit_index]
+
+- name: --- enable and start nginx ---
+  service:
+    name: nginx
+    enabled: true
+    state: started
+  tags: [start_nginx]

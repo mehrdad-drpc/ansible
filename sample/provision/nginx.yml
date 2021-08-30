@@ -1,0 +1,4 @@
+- name: Nginx Servers Playbook
+  hosts: nginx_servers
+  roles:
+   - nginx
