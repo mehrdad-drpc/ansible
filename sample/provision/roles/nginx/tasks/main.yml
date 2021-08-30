@@ -23,3 +23,12 @@
     enabled: true
     state: started
   tags: [start_nginx]
+
+- name: --- open port on Nginx machines over the firewalld ---
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    zone: public
+    state: enabled
+    immediate: true
+  tags: [allow_firewalld]

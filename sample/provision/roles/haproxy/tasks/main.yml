@@ -1,0 +1,46 @@
+- name: --- add nginxs ip address to own host ---
+  lineinfile:
+    path: /etc/hosts
+    insertafter: EOF
+    line: "{{ item }}"
+  loop: 
+    - '192.168.0.187  nginx1.lb.me  nginx1'
+    - '192.168.0.182  nginx2.lb.me  nginx2'
+  tags: [add_nginx_addresses]
+
+- name: --- install haproxy service ---
+  apt:
+    name: haproxy
+    state: present
+  tags: [install_haproxy]
+
+- name: --- configure haproyx ---
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  tags: [configure_haproxy]
+
+- name: --- config rsyslog ---
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  tags: [configure_rsyslog]
+
+- name: --- haproxy.conf for rsyslog ---
+  template:
+    src: haproxy_rsyslog.conf.j2
+    dest: /etc/rsyslog.d/haproxy.conf
+  tags: [configure_rsyslog]
+
+- name: --- restart rsyslog service ---
+  service: 
+    name: rsyslog
+    state: started
+  tags: [restart_rsyslog]
+
+- name: --- enable & start haproxy service ---
+  service:
+    name: haproxy
+    enabled: true
+    state: started
+  tags: [en_start_haproxy]
