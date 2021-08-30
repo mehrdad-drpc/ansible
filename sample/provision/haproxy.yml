@@ -1,0 +1,4 @@
+- name: HAProxy Edge Server Playbook
+  hosts: haproxy_server
+  roles:
+    - haproxy
