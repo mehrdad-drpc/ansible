@@ -28,3 +28,6 @@ nfs_client
 [ha_nodes:children]
 nfs_server
 nfs_client
+
+[my_docker]
+172.16.10.141

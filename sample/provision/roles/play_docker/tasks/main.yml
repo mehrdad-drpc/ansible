@@ -1,0 +1,104 @@
+# docker image module
+- name: --- pull docker image ---
+  docker_image:
+    name: "{{ item }}"
+    source: pull
+  loop:
+    - alpine
+    - nginx
+  tags: [pull_image]
+
+- name: --- build docker images ---
+  docker_image:
+    name: myimage:v1
+    build:
+      path: /root/docker
+      pull: yes
+    source: build
+  tags: [build_image]
+
+- name: --- inspect image ---
+  docker_image_info:
+    name: nginx
+  register: inspect_out_image
+  tags: [inspect_image]
+
+- name: --- show inspect image ---
+  debug:
+    msg: "{{ inspect_out_image }}"
+  tags: [inspect_image]
+
+# docker container module
+- name: --- docker run ---
+  docker_container:
+    name: mynginx
+    image: nginx
+    ports:
+      - "80:80"
+    # state: [absent, present, stopped, started]  default value is 'started'
+  tags: docker_run
+
+- name: --- docker container info ---
+  docker_container_info:
+    name: mynginx
+  register: inspect_out_container
+  tags: [inspect_container]
+
+# docker network module
+- name: --- show inspect container ---
+  debug:
+    msg: "{{ inspect_out_container }}"
+  tags: [inspect_container]
+
+- name: --- create docker network ---
+  docker_network:
+    name: mynet
+    driver: bridge
+    ipam_config:
+      - subnet: 172.16.10.255/24
+        gateway: 172.16.10.254
+        iprange: 172.16.10.0/25
+  tags: [docker_network_create]
+
+- name: --- docker network inspect ---
+  docker_network_info:
+    name: mynet
+  register: inspect_out_net
+  tags: [inspect_network]
+
+- name: --- show network inspect ---
+  debug:
+    msg: "{{ inspect_out_net }}"
+  tags: [inspect_network]
+
+# docker volume module
+- name: --- create docker volume ---
+  docker_volume:
+    name: myvol
+  tags: [create_volume]
+
+- name: --- docker volume inspect ---
+  docker_volume_info:
+    name: myvol
+  register: inspect_out_vol
+  tags: [inspect_volume]
+
+- name: --- show volume inspect ---
+  debug:
+    msg: "{{ inspect_out_vol }}"
+  tags: [inspect_volume]
+
+# docker swarm module
+- name: --- manage swarm ---
+  docker_swarm:
+    state: present
+  tags: [docker_swarm]
+
+- name: --- add node to swarm ---
+  docker_swarm:
+    state: join
+    advertise_addr: 172.16.10.141
+    join_token: SWMTKN-1-xxxx
+    remote_addrs: ['172.16.10.141:2377']
+  tags: [docker_swarm]
+

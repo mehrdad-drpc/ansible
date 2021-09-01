@@ -1,0 +1,5 @@
+- name: some playbooks related to docker
+  hosts: my_docker
+  roles:
+    - play_docker
+
