@@ -1,9 +1,9 @@
-- name: --- install package via apt ---
-  apt:
-    name: nginx
-    state: present
+- name: --- create directory over the hosts ---
+  file:
+    path: /tmp/dir1
+    state: directory
 
-- name: --- start nginx service ---
-  service:
-    name: nginx
-    state: started
+- name: --- create new file ---
+  file:
+    path: /tmp/dir1/file1
+    state: touch
