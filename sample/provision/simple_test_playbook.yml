@@ -1,4 +1,4 @@
-- name: something about your playbook
+- name: simple_test_playbook select host and inventory
   hosts: myservers
   roles:
     - simple_test_playbook
