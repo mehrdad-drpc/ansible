@@ -1,8 +1,4 @@
 - name: something about your playbook
-  hosts: <<host_name>>
+  hosts: myservers
   roles:
     - simple_test_playbook
-  vars:
-    key1: val1
-    key2: val2
-  become: true/false
