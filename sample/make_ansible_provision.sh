@@ -90,8 +90,8 @@ mkdir roles/$project_name/meta || fail
 touch roles/$project_name/meta/main.yml || fail
 success
 
-bold_echo "make file directory"
-mkdir roles/$project_name/file || fail
+bold_echo "make files directory"
+mkdir roles/$project_name/files || fail
 success
 
 bold_echo "make tamplates directory"
